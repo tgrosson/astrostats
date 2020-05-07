@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Time Series Analysis</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>autocorrelation &mdash; description of how a time series correlates with itself at a certain lag time</li>
+            <li>correlogram &mdash; plot of the autocorrelation function</li>
+            <li>stationarity &mdash; the property of not having any statistical difference between arbitrary times &ndash; includes both constant white noise and e.g. a constant sine wave</li>
+            <li>differencing &mdash; taking the difference between consecutive points in a time series to increase stationarity</li>
+            <li>power spectrum &mdash; Fourier trasnform of the ACF</li>
+            <li>periodogram &mdash; plot of the power spectrum</li>
+        </ul>
+        
+        <h2>R Functions:</h2>
+        <ul class="r">
+            <li>acf(ts), pacf(ts)</li>
+            <li>forecast{ndiffs(ts)}</li>
+            <li>diff(ts,differences=d)</li>
+            <li>tseries{arma(ts,order=(p,q))}</li>
+            <li>forecast{Arima(ts,order=(p,d,q)), auto.arima(ts)}</li>
+        </ul>
+        
+        <h2>Time Domain Analysis</h2>
+        <h3>Smoothing</h3>
+        <p>Many of the methods described in the <a href="smooth.html" style="color:#0e517a">smoothing</a> section can be applied to evenly spaced time-domain data. One of the most common and simplest methods is the central moving average (CMA), which averages the data over the surrounding <i>j</i> time intervals: \(\hat{X}_{i,CMA}(j)=\frac{1}{j+1}\sum\limits_{k=-j/2}^{j/2}X_{i+k}\).</p>
+        
+        <h3>Autocorrelation</h3>
+        <p>The autocorrelation function (ACF) is the <a href="pca" style="color:#0e517a">correlation</a> between a function and itself shifted by a lag <i>k</i>. The related partial autocorrelation function (PACF) removes the effect of shorter lags, resulting in a function that doesn't give the autocorrelation, but still shows timescales at which there is autocorrelation.</p>
+        <img src="resources/ACF_PACF.jpg" />
+        <div class="caption">The ACF and PACF for a sample time series. The PACF shows a more simplified view of more or less the same information.</div>
+        
+        <h3>Stochastic Autoregressive Models</h3>
+        <p>If we want to model a time series which has stochatic noise in it, there are several models we can use. The simplest is a random walk, \(X_i=X_{i-1}+\epsilon_i\), whose mean is zero and whose ACF slowly decreases from 1. Allowing the current point to be dependent on any number of previous points results in the autoregressive (AR) model, where each previous point has some weight associated with it.</p>
+        <p>The moving average (MA) model instead assigns weights to the previous \(\epsilon\) terms instead of the variable itself. The ARMA model combines AR and MA by adding the two directly, and it can be used to describe a wide range of time series. The model is usually written as \(ARMA(p,q)\), where <i>p</i> describes the number of nonzero AR coeffeicients, and <i>q</i> describes the number of nonzero MA coefficients. This model is stationary, so it is unable to model time series which are nonstationary.</p>
+        <p>The ARIMA model (I stands for "integrated") treats this problem by differencing the time series <i>d</i> times, until it is stationary, then applying an ARMA model.</p>
+        <div class="ims"><img class="ims" src="resources/sp500.png" /></div><div class="ims"><img class="ims" src="resources/sp500diff.png" /></div>
+        <div class="caption">Left: the S&amp;P500 index over time. Right: the same after two rounds of differencing</div>
+        
+        <h3>Unevenly Spaced Data</h3>
+        <p>Often in astronomy, a time series will not have evenly spaced observations, such as when searching a star's light curve over many months for transiting exoplanets&mdash;we can obviously only have observations from when the Earth is not in our way. We then want a way to find the ACF wihtout interpolating our data onto a regular grid as before. One method of doing so is called slot autocorrelation. This method groups lags together into evenly spaced bins, and the ACF is then computed for those bins. As with histograms, a bin width must be chosen without mathematical aid.</p>
+        
+        <h2>Spectral Analysis</h2>
+        <h3>Fourier Analysis</h3>
+        <p>Time series can be subjected to Fourier analysis, which gives us the power spectrum. This contains the same information as the ACF, and the two can be derived from each other. The power spectrum can be plotted in a periodogram.</p>
+        <p>If we want to find some periodicity that's hidden beneath a more dominant periodicity, Fourier analysis can be used to subtract out the dominant sinusoid from the time series, repeating if necessary. This is called iterative pre-whitening.</p>
+        
+        <h3>Unevenly Spaced Data</h3>
+        <p>In astronomy, the Lomb-Scargle periodogram is a favorite for irregularly spaced data. It is essentially a least-squares regression to a sum of sine and cosine waves. A periodogram can also be derived from the slot autocorrelation function.</p>
+        
+        <h3>Non-Fourier Analysis</h3>
+        <p>If a periodic signal is not sinusoidal, periodicity might be more easily found by folding the data, or wrapping the data into a chosen period. The optimal period is found by minimizing the string length, which is the total length between consecutive data points.</p>
+        <div class="ims"><img class="ims" src="resources/fold1.png" /></div><div class="ims"><img class="ims" src="resources/fold2.png" /></div>
+        <div class="caption">Left: data folded at the correct period has a low string length. Right: folding at the wrong period results in a large string length</div>
+        
+        <h2>Cross-Correlation</h2>
+        <p>If we have multiple variables we're measuring over time, we can meausre how they relate to each other over time with the cross-correlation function, which is a simple extension of the ACF. In fact, the CCF of a time series with itself is exactly the ACF.</p>
+        
+        <div class="end"></div>
+        
+    </div>
+
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Data Smoothing</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>density estimation &mdash; estimation of the (continuous) pdf given a set of observations</li>
+        </ul>
+        
+        <h2>R Functions:</h2>
+        <ul class="r">
+            <li>hist(x,breaks=[,'scott'])</li>
+            <li>density(x,bw=bandwidth) (constant density kernel)</li>
+            <li>quantreg{akj(x, &lt;places to estimate&gt;)} (Silverman estimator)</li>
+            <li>npregbw(x,y) (NW estimator)</li>
+            <li>pspline{sm.spline(x,y,df=df)}</li>
+        </ul>
+        
+        <h2>Histograms</h2>
+        <p>Groups counts of data into bins. The normalized histogram estimator of the pdf \(\hat{f}_{hist}(x)\) is the number of counts in the bin containing <i>x</i> divided by \(nh(x)\). The biggest issue for histograms is determining bin widths. A rule of thumb for ~normal distributions is the Scott width \(h_{Scott}=\frac{3.5\,s.d.}{n^{1/3}}\). However, there is no actual mathematical basis for any choice of histogram origin or bin width.</p>
+        
+        <h2>Kernel Density Estimators</h2>
+        <p>Creates a pdf by convolving the discrete data with some kernel function. The kernel estimator \(\hat{f}_{kern}(x,h)=\frac{1}{nh}\sum\limits_iK(\frac{x-X_i}{h})\) for some kernel <i>K</i>. For the data [2,4,5], some kernel estimators might look like</p>
+        <div class="ims"><img class="ims" src="/resources/kern1.PNG" /></div><div class="ims"><img class="ims" src="resources/kern2.PNG" /></div>
+        <div class="caption">Left: rectangular (constant density) kernel of width 1. Right: rectangular and triangular kernels of width 4.</div>
+        <p>Commonly used kernels include Gaussian densities, the Epanechikov kernel, \(K(y)=\frac{3}{4}(1-y^2)\), an inverted parabola, and the inverted triangle demonstrated above. Again, bandwidths are arbitrarily determined, but rules of thumb exist.</p>
+        <p>It is simple to extend kernel density estimators to higher dimensions.</p>
+        
+        <h2>Adaptive Smoothing</h2>
+        <p>It can be useful to vary the bandwidth depending on the data. A practical use for this could be density estimation of a galaxy on a dark sky, so we aren't overfitting the dark but also not clumping the galxy into just a couple bins. A common example is the Silverman adaptive kernel smoother, which is easy to implement in R.</p>
+        
+        <p>The <i>k</i>-th neares neighbor estimator \(\hat{f}_{knn}(x)=\frac{k/2n}{d_x(x)}\) is straightforwardly based on the distance <i>d</i> to the nearest neighbor, although it is not normalized and therefore not a true pdf. Nevertheless, it still produces good density estimations.</p>
+        
+        <h2>Nonparametric Regression</h2>
+        <h3>Nadaraya-Watson (NW) Estimator</h3>
+        <p>If we want to find the relationship between a random variable and its response variable without making a guess of the form of the relationship, as required for regression, we can use nonparametric gregression. The NW estimator is essentially a weighted local average of the response variable: \(\hat{r}_{NW}(x)=\frac{\sum_iY_iK(\frac{x-X_i}{h_x})}{\sum_iK(\frac{x-X_i}{h_x})}\).</p>
+        
+        <h3>Spline Smoothing</h3>
+        <p>Splines estimate the function by concatenating several functions, joining them at locations called knots. Between each knot, a regression is used to find the best fit function that is continuous and smooth at the knots. Cubic splines are used often.</p>
+        <img src="resources/spline.jpg" />
+        <div class="caption">Example of generation of a cubic spline</div>
+        
+        <div class="end"></div>
+    </div>
+
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

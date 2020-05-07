@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Regression</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>heteroscedastic &mdash; error which varies with X</li>
+            <li>linear model &mdash; linear in the model parameters, not necessarily in X</li>
+            <li>structural model &mdash; X is a random variable</li>
+            <li>functional model &mdash; X is deterministic</li>
+            <li>M-estimator &mdash; a regression solution which maximizes a function of the model</li>
+        </ul>
+        
+        <h2>R Functions:</h2>
+        <ul class="r">
+            <li>lm(y~x) (linear regression. use poly(x,degree) for a polynomial fit)</li>
+            <li>pracma{odregress(x,y)} (orthogonal regression)</li>
+            <li>rlm(y~x, psi=[psi.huber, psi.bisquare, etc])</li>
+            <li>glm(y~x, family="binomial") (logisitc regression)</li>
+            <li>AIC(&lt;model&gt;), BIC()</li>
+        </ul>
+        
+        <h2>Least-Squares Linear Regression</h2>
+        <h3>Ordinary Least Squares</h3>
+        <p>Minimizes residual sum of squares (RSS), the vertical distance between the model and the observations.</p>
+        
+        <h3>Symmetric Least Squares</h3>
+        <p>Instead of minimizing the vertical distance between the data and the model, symmetric least squares minimizes the orthogonal distance between the two. This is used mainly when one variable is not strictly dependent on the other, or the two are symmetrically dependent.</p>
+        
+        <h3>Bootstrapping Errors</h3>
+        <p>If the errors of our data are heteroscedastic, especially for small datasets, the model could be thrown off by the errors. We can use bootstrap to try to help this.</p>
+        <p><b>Paired bootsrap</b> describes resampling from each observations error bars and fitting a model to the resampled points. The type of error (e.g. normal versus systematic/uniform) can affect the results as well.</p>
+        <p><b>Classical bootstrap</b> describes resampling from the original model's residuals instead, creating new points that are that distance away from the original model, then creating bootstrapped models from those points.</p>
+        
+        <h3>Robust Regression</h3>
+        <p>Outliers stink. Luckily we can reduce their impact on our regression models with a few different methods. Most commonly, we use <b>M-estimation</b>, which involves a function which changes the values of outlying points. Examples include the:</p>
+        <ul>
+        <li><b>trimmed estimator</b>, which assigns the residual of a point to 0 if it is greater than a certain cutoff;</li>
+        <li><b>Huber estimator</b>, which assigns all residuals greater than a cutoff value to that cutoff value; and</li>
+        <li><b>Tukey's biweight function</b>, which assigns residuals greater than cutoff <i>c</i> to \(x(c^2-x^2)^2\).</li>
+        </ul>
+        <p>Also available is the <b>least absolute deviation (LAD) estimator</b>, which minimizes the sum of residuals without squaring them.</p>
+        <p>Finally, the <b>Thiel-Sen median slope</b> line is created by taking the median slope of every line between all pairs of points. This method is very good at eliminating the effect of outliers on the regression.</p>
+        
+        <h2>Maximum Likelihood Estimation</h2>
+        <p>Maximum likelihood estimation wants to find the maximum probability that the data are drawn from a model using the likelihood function \(\mathcal{L}=\prod\limits_iP_i\), for whatever probability distribution the errors follow. It's generally easier to maximize the loglikelihood \(\ln(\mathcal{L})\) in order to take the derivative of a sum instead of a product.</p>
+        
+        <h2>Weighted Least Squares</h2>
+        <p>If we have heteroscedastic errors, it may be useful to give less weight to observations with larger errors. In astronomy, we often use <b>minimum &chi;<sup>2</sup> regression</b> for this, by minimizing \(\sum\limits_i\frac{resid_i^2}{\sigma_i^2}\), where \(\sigma_i^2\) is the variance of the normal error or each observation.</p>
+        
+        <h2>Nonlinear models</h2>
+        <p>Nonlinear models can in general still be found by minimizing the RSS, the model just takes a different form.</p>
+        
+        <h3>Poisson Regression</h3>
+        <p>A special kind of nonlinear model common in astronomy which describes events following a Poisson distribution. Using maximum likelihood estimation results simply in \(\hat{\lambda}=\bar{x}\).</p>
+        
+        <h3>Logistic Regression</h3>
+        <p>Not very common in astronomy, but often used to predict success based on a variable. Think of Persephone trying to jump through different diameter hoops.</p>
+        
+        <h2>Residual Analysis</h2>
+        <h3>R<sup>2</sup> and Adjusted R<sup>2</sup></h3>
+        <p>A good model should have an R<sup>2</sup> value approaching 1, where \(R^2=1-\frac{RSS}{\sum(Y_i-\bar{Y_i})^2}\). To penalize uzing large numbers <i>p</i> of parameters though, it is better to look at the adjusted R<sup>2</sup> \(R_a^2=1-\frac{n-1}{n-p}(1-R^2)\).</p>
+        
+        <h3>AIC and BIC</h3>
+        <p>For likelihood-based regression, it's common to use the Akaike information criterion (AIC) or Bayesian information criterion (BIC), which also penalize large numbers of parameters. Both can easily be found in R.</p>
+        
+        <div class="end"></div>
+        
+    </div>
+
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Spatial Point Processes</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>stationary &mdash; invariant under spatial translation</li>
+            <li>isotropic &mdash; invariant under rotation</li>
+            <li>marked point process &mdash; nonspatial data which is associated with spatial coordinates</li>
+            <li>CSR &mdash; complete spatial randomness</li>
+        </ul>
+        
+        <h2>Uniformity</h2>
+        <p>CSR can be tested with an analysis of the nearest-neighbor distribution. This is a measure of the sum of the distances to a specified number of nearest neighbors, and should be asymptotically normal if CSR holds.</p>
+        
+        <h2>Spatial Autocorrelation</h2>
+        <p>...is basically the same thing as the autocorrelation seen in time series analysis. The variance of different scales is displayed in a variogram, or usuallly a semi-variogram which divides the variances by two. For a stationary, isotropic, Gaussian process, the variogram displays an offset at 0 of \(\sigma^2\), called the nugget, which is due to variations smaller than the minimum correlation distance measured. The value the variogram approaches is called the sill.</p>
+        <img src="resources/nugget.png" />
+        <div class="caption">Variogram demonstrating the nugget effect, with the nugget on the left and the sill toward the right.</div>
+        
+        <h2>Spatial Interpolation</h2>
+        <p>is also very similar to the interpolations seen in the smoothing section. A common method used especially in geosciences is kriging, which uses least squares to estimate a response variable. Ordinary kriging estimates the response variable by summing weights of every other sampled point, and the weights are determined by the variogram of the data.</p>
+        
+        <h2>Spatial Regression</h2>
+        <p>Finally, we can determine models for spatial data like we would in any regression problem. Geographically weighted regression is common in geostatistics and seeks to find the relationships between multiple variables which are location-dependent. It thus tries to find correlations between the variables as a function of location, as opposed to a global correlation. For example, how violence rates in an area are affected by alcohol outlet locations in that area.</p>
+        
+        <div class="end"></div>
+        
+    </div>
+    
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+   <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Math Intro</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>probability function (pdf) &mdash; probability of a distribution for a given value</li>
+            <li>cumulative distribution function (cdf) &mdash; sum of lower values of the pdf</li>
+            <li>expected value &mdash; mean value of a distribution</li>
+            <li>jackknife &mdash; statistic estimation by removing data points</li>
+            <li>bootstrap &mdash; statistic estimation by resampling from data</li>
+        </ul>
+        
+        <h2>PDFs</h2>
+        <h3>Uniform Distribution</h3>
+        <p>Every outcome has an equally likely probability.</p>
+        
+        <h3>Binomial Distribution</h3>
+        <p>There are two outcomes, success (1) or failure (0), and probability of success &theta;. The probability of <i>x</i> successes in <i>n</i> trials is \(\frac{n!\,\theta^x\,(1-\theta)^{n-x}}{x!\,(n-x)!}\). The mean \(\mu=n\,\theta\) and the variance \(\sigma^2=n\,\theta\,(1-\theta)\).</p>
+        
+        <h3>Geometric Distribution</h3>
+        <p>Probability that first success occurs on attempt <i>x</i> is \(\theta\,(1-\theta)^{x-1}\). Russian Roulette, for example.</p>
+        <img src="resources/geomdist.gif" />
+        <div class="caption">Geometric distribution</div>
+        
+        <h3>Poisson Distribution</h3>
+        <p>Is the limit as \(n\rightarrow\infty\) and \(\theta\rightarrow0\) such that \(n\theta=\lambda\) of the binomial distribution. \(p(x,\lambda)=\frac{\lambda^xe^{-\lambda}}{x!}\), and <span class="emph">\(\mu=\sigma^2=\lambda\)</span>. This is also the distribution describing shot noise.</p>
+        <img src="resources/poisdist.png" />
+        <div class="caption">Poisson distribution</div>
+        
+        <h3>Gaussian (Normal) Distribution</h3>
+        <p>Really really common. You should know what this is. \(p(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{\frac{(x-\mu)^2}{2\sigma^2}}\)</p>
+        
+        <h3>Gamma Distribution</h3>
+        <p>Has a few subcategories. \(f(x)=\frac{1}{\beta^\alpha\Gamma(\alpha)}x^{\alpha-1}e^{-x/\beta}\) for \(x > 0\).</p>
+        <ul>
+        <li>Exponential Distribution: \(\alpha=1, \beta=0\)</li>
+            <li>Chi-Square Distribution: \(\alpha=\nu/2, \beta=2.\; \mu=\nu, \sigma^2=2\nu\).
+                <p>If \(x_1,...,x_n\) are standard normal, \(y=\sum_i^nx_i^2\) has a \(X_n^2\) distribution.</p></li></ul>
+        <img src="resources/expdist.png" />
+        <div class="caption">Exponential distribution</div>
+        <img src="resources/chisqdist.png" />
+        <div class="caption">Chi-square distribution</div>
+        
+        <h2>Central Limit Theorem</h2>
+        <p>If we have <i>n</i> independent random variables with the same mean and variance, as \(n\rightarrow\infty\) the distribution of the <u>measured</u> averages approaches a normal distribution with mean <i>&mu;</i> and variance \(\sigma^2/n\). This is true for <u>any</u> distribution.</p>
+        
+        <h2>Jackknife</h2>
+        <p>If we're trying to measure some statistic of a sample, we can improve our estimate by getting more samples. However, this often isn't practical, so one technique to use is jackknifing. This describes creating <i>n</i> new samples by removing each data point one at a time from the original sample. Our statistic estimator can then be the average of the <i>n</i> measured estimators.</p>
+        <img src="/resources/jackknife.jpg">
+        <div class="caption">Samples created by jackknifing</div>
+        <p>If the estimator varies with <i>n</i>, the sample is called <i>biased</i>, and we can generate a new estimator \(\theta_J=\hat{\theta_n}-bias_J=\hat{\theta}_n-\frac{n-1}{n}\sum_i^n(^i\hat{\theta}_{n-1}-\hat{\theta}_n)\).</p>
+        
+        <h2>Bootstrap</h2>
+        <p>Another method we can use to try to get better accuracy is to resample from the data points we have. We randomly sample from our data on the order of 1,000 to 10,000 times, and take the average of the resulting measured statistics to get our bootstrapped statistic estimator.</p>
+        
+        <h2><i>t</i>- and <i>z</i>- Distributions</h2>
+        <p>If we know a variable follows a normal distribution with mean <i>&mu;</i> and variance <i>&sigma;<sup>2</sup></i>, we can test how likely it is that a point comes from that distribution with the <i>z</i>-test: \(z=\frac{X-\mu}{\sigma}\). This is useful in nonparametric tests, for example, and we can use a <i>z</i> score table to interpret results from the test.</p>
+        <img src="resources/zscore.png"/>
+        <div class="caption">z score table. The table values are the p-value that that the value comes from the normal distribution</div>
+        <p>If we know the mean of the distribution, but not the variance, we can use the standard deviation <i>s</i> of the sample as a variance estimator: \(t=\frac{X-\mu}{s/\sqrt{n}}\). Results can be interpreted from a <i>t</i> score table.</p>
+        <img src="resources/tscore.png" />
+        <div class="caption">t score table. Table values are the t score for n degrees of freedom at confidence level &alpha;</div>
+        
+        <div class="end"></div>
+
+    </div>
+    
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

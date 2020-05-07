@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Censored and Truncated Data</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>truncation &mdash; undetected objects do not appear in the data in any form</li>
+            <li>censoring &mdash; objects are detected, but within the observation limits of the desired variable</li>
+            <li>left-censored &mdash; censored data which has an <u>upper</u> limit, so it is to the left of some value</li>
+        </ul>
+        
+        <h2>R Functions:</h2>
+        <ul class="r">
+            <li>survival{survfit(Surv_object)}</li>
+            <li>fitdistrplus{fitdistcens(censdata,distr)}</li>
+        </ul>
+        
+        <h2>Survival Analysis</h2>
+        <p>The survival function \(S(x)=1-CDF(x)\) is the probability that an object has a value above some level <i>x</i>.</p>
+        <img src="resources/survive.PNG" />
+        <div class="caption">Survival function of years until a Roman emperor is assassinated</div>
+        <p>While this is not used directly very often in astronomy, it can be used to infer information about censored data.</p>
+        
+        <h2>Censoring</h2>
+        <h3>Parametric Estimation</h3>
+        <p>If we already know the distribution of a censored dataset, we can sometimes directly find the parameters of the distribution to account for the unknown values. For a Poisson distribution which has only 0-values truncated, we have simply \(\frac{\hat{\lambda}}{1-e^{-\hat{\lambda}}}=\bar{X}\).</p>
+        
+        <h3>Kaplan-Meier (KM) Nonparametric Estimator</h3>
+        <p>The EDF of a sample with censoring can be found by redistributing nondetections into the sample with weights associated with the probability that an object is below a certain level.</p>
+        
+        <h3>Two Sample Tests</h3>
+        <p>This is the same question that we asked before regarding whether two samples come from the same distribution. The simplest test for censored samples is the Gehan test, which is a generalized Wilcoxon test. The Gehan statistic is the sum of all cross-sample comparisons, where each individual comparison value is 1 for a value greater than the other point, -1 for a value less than the other, and 0 for ill-determined relationships.</p>
+        <img src="resources/gehan.png" />
+        <div class="caption">The red circle is less than four points, and ill-determined with the one cross which is beneath it</div>
+        
+        <h2>Truncation</h2>
+        <p>Truncation is harder to deal with than censoring, for obvious reasons, but a few methods exist. One is the Lynden-Bell-Woodroofe estimator, which is quite similar to the KM estimator, except it is based on a truncation limit instead of censored values.</p>
+        <img src="resources/LBW.jpg" />
+        <div class="caption">Example of application of the LBW estimator</div>
+        
+        <div class="end"></div>
+        
+    </div>
+
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

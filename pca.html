@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Multivariate Analysis/PCA</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>ill-conditioned &mdash; refers to a system in which multiple variables are colinnear, causing instability in regression</li>
+        </ul>
+        
+        <h2>R Functions:</h2>
+        <ul class="r">
+            <li>prcomp(&lt;matrix&gt;)</li>
+            <li>JADE{NSS.TD.JD(ts)} (ICA procedure used to separate audio)</li>
+        </ul>
+        
+        <h2>The Covariance Matrix</h2>
+        <p>The covariance matrix \(S_{jk}=\frac{1}{n}\sum\limits_i^n(X_{ij}-\bar{X}_j)(X_{ik}-\bar{X}_k)\) measures the correlation (non-technical term&mdash;correlation is covariance normalized by the two variances) between variables <i>k</i> and <i>j</i>, and the diagonal elements are simply the variances of each variable.</p>
+        <img src="resources/covariance.jpg" />
+        <div class="caption">Examples of covariance between variables</div>
+        
+        <h2>Multivariate Distances</h2>
+        <p>Spatially we generally use the Euclidean distance, but also available is the Manhattan distance or higher-order distances. The choice of units between dissimilar variables can highly affect the distances between observations, so a common solution is to set each variable to have zero mean and scale by the standard deviation: \(Z_{ij}=\frac{X_{ij}-\bar{X}_j}{\sqrt{S_{jj}}}\), then proceed as normal.</p>
+        
+        <h2>Multivariate Distributions</h2>
+        <p>Many 1-dimensional distributions can readily be generalized to higher dimensions. Particularly important is the multivariate normal (MVN) distribution, which is a natural multivariate generalization of the 1D normal distribution. The shape of the distribution is determined byt the covariance matrix.</p>
+        
+        <h2>Hypothesis Testing</h2>
+        <p>The multivariate analog of the <i>t</i>-test is the Hotelling \(T^2\), \(T^2=n(\mathbf{\bar{X}}-\mu_0)'\mathbf{S}^{-1}(\mathbf{\bar{X}}-\mu_0)\), and probabilities for the null hypothesis \(\mu=\mu_0\) can be found from tables.</p>
+        
+        <h2>Multivariate Regression</h2>
+        <p>Regression can also be extended fairly simply into higher dimensions, although some problems can occur. A major example is ill-conditioning, in which the existence of collinear variables causes the matrix \((\mathbf{X}^T\mathbf{X})\) to approach singularity (i.e. not invertible). One way to resolve this issue is through ridge regression, in which some scalar is added to the diagonal of the matrix mentioned. The optimal value added can be determined experimentally, and results in a much more stable regression.</p>
+        
+        <h2>Principal Component Analysis (PCA)</h2>
+        <p>PCA seeks to find the variables which cause the greatest variation in the data and creates a model based on the axes found.</p>
+        <img src="resources/PCAax.jpg" />
+        <div class="caption">Axes found by PCA analysis. PCA1 is the variable which most explains changes in data </div>
+        <p>It is not necessarily simple to interpret the meaning of the principal components; they will generally be some combination of variables which does not need to have a physical meaning at all. It is therefore important to not blindly base results on a PCA analysis without first thinking about what the PCs might refer to. When looking at the effect of the PCs on the response variables, it is most common to use scree plots an biplots:</p>
+        <div class="ims"><img class="ims" src="resources/PCAscree.jpg" /></div><div class="ims"><img class="ims" src="resources/PCAbiplot.jpg" /></div>
+        <div class="caption">Left: PCA scree plot. Right: PCA biplot</div>
+        <p>Scree plots show how much each PC contributes to the variance of the data. Biplots demonstrate the composition of PCs by showing how much a variable is changed by a unit change in the PCs shown. Vectors which are very similar are often interpreted to be correlated in some way.</p>
+        <p>Finding the PCs of a set of data is often used to reduce the dimensionality of the data by grouping the variables which compose the first several PCs into single variables. This can make it easier to analyse relationships between the data.</p>
+        
+        <h2>Independent Component Analysis (ICA)</h2>
+        <p>If we want to go deeper into separating out the different components of our data, we can use ICA. While the PCs in PCA are necessarily orthogonal to each other and not independent, the components found from ICA are not orthogonal, and are indeed independent (or as close to independent as possible). This process can be used to great effect in separating out the sources in mixture models, such as placing microphones in a noisy room. Examples of results using R are demonstrated below.</p>
+        <div class="caption">
+            <audio controls>
+            <source src="resources/Mix1.wav" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio></div>
+        <div class="caption">
+            <audio controls>
+            <source src="resources/PC3.wav" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio></div>
+        <div class="caption">
+            <audio controls>
+            <source src="resources/source6_Piano.wav" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio></div>
+        <div class="caption">
+            <audio controls>
+            <source src="resources/source4_SLJ.wav" type="audio/wav">
+            Your browser does not support the audio element.
+            </audio></div>
+        <div class="caption">Audio files of (1) the mixtures recorded by the microphone, (2) an attempt to separate the sources with PCA, (3 &amp; 4) two of the five sources identified with ICA.</div>
+        
+        <div class="end"></div>
+        
+    </div>
+
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

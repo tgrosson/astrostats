@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 125%;
+    line-height: 1.6em;
+    overflow-y: scroll;
+}
+
+.site-header {
+    border-bottom: 1px solid #141414;
+    background-color: #222930;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.site-header-inner {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #222930;
+}
+
+#container {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 14px;
+}
+
+.site-footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #141414;
+    background-color: #222930;
+    text-align: center;
+    font-size: 0.6em;
+    color: #555;
+}
+
+.site-title {
+    font-size: 1.5em;
+    line-height: 2em;
+    letter-spacing: 0;
+    text-align: center;
+    color: #e9e9e9;
+}
+
+.site-links {
+    font-family: "Arial";
+    font-size: 0.75em;
+    line-height: 2em;
+    letter-spacing: 0;
+    text-align: center;
+    color: #e9e9e9;
+    font-weight: 100;
+    word-spacing: 20px;
+}
+
+a {
+    word-spacing: normal;
+}
+
+a:link,a:visited {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: underline #4eb1ba;
+}
+
+body {
+    background-color: #c2c9d0;
+}
+
+.content {
+    margin-top: 166px;
+    margin-left: 300px;
+    margin-right: 300px;
+    color: #222930;
+}
+
+.page-title {
+    color: #0e517a;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #222930;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    color: #222930;
+    margin: 0;
+}
+
+p {
+    margin-bottom: 20px;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+.wideim {
+    width: 90%;
+}
+
+.caption {
+    text-align: center;
+    line-height: 1.2em;
+    margin-bottom: 10px;
+    font-size: 0.8em;
+    font-family: sans-serif;
+    font-style: italic;
+    color: #626970;
+}
+
+.eqn {
+    height: 25px;
+}
+
+ul {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    line-height: 1.2em;
+}
+
+.terms {
+    font-style: italic;
+}
+
+.r {
+    font-family: monospace;
+}
+
+.emph {
+    border: 2px solid #000;
+    padding: 2px;
+}
+
+.ims {
+    display: inline-block;
+    width: 50%;
+}
+
+img.ims {
+    width: 98%;
+    vertical-align: middle;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+    text-align: center;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+.end {
+    padding-bottom: 40px;
+}

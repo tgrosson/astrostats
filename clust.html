@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Clustering</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>unsupervised classification &mdash; techniques which do not take prior information about the clusters</li>
+            <li>supervised classification &mdash; techniques which do</li>
+            <li>CART &mdash; a suite of methods belonging to Classification And Regression Trees</li>
+        </ul>
+        
+        <h2>R Functions:</h2>
+        <ul class="r">
+            <li>mclust{Mclust(data)} (Gaussian mixture model)</li>
+            <li>rpart{rpart(y~x,method="class"), prune(fit)} (create and prune a classification tree)</li>
+            <li>MASS{lda(y~x)}</li>
+            <li>class{knn(train,test,train_classifications,k)}</li>
+        </ul>
+        
+        <h2>Unsupervised Methods</h2>
+        <h3>Hierarchical Clustering</h3>
+        <p>Agglomerative clustering refers to initially assigning each point to its own cluster, then iteratively merging the two clusters which are closest together until a single cluster remains. A cutoff is then decided to determine how many clusters there are, usually aided by looking at a dendrogram, which displays each merger and the distance at which they occur.</p>
+        <img src="resources/dendro.jpg" />
+        <div class="caption">A dendrogram showing the chosen divisions in red</div>
+        <p>How we define the shortest distance between clusters can significantly affect the clusters determined. One common definition, especially in astronomy, is the friends-of-friends, or nearest-neighbor algorithm, which considers the nearest neighbor of a cluster, as the name suggests. This method can result in long chains, though, which might not be representative of the actual groups. Complete linkage uses the distance to the farthest point instead, resulting in more symmetrical and compact groups. A middle ground is average linkage, which uses the average distance.</p>
+        
+        <h3>Mixture Models</h3>
+        <p>A way to determine whether a dataset is more consistent with white noise or has peaks is through parametirc mixture models. We want to find the means and variances of the <i>k</i> Gaussians which have the maximum likelihood of explaining the data. Algorithms in R have the ability to identify the parameters of the Gaussians as well as the optimal number of clusters.</p>
+        
+        <h2>Supervised Methods</h2>
+        <p>Supervised classification relies on the existence of some training data on which an algorithm bases its classifications. The models can then be used to predict the classifications of new data.</p>
+        
+        <h3>Classification Trees</h3>
+        <p>A very straightforward method for classification is through decision trees, which base classifications on absolute position in the variable space. The tree is grown by creating nodes which maximize the drop in misclassifications (or some other impurity measure). To prevent a number of branches equal to the number of points, we introduce pruning to the tree, which in general penalizes tree complexity. The package {rpart} in R does this with a metric called the relative error. Minimizing this value determines the optimal number of branches in the tree.</p>
+        <img src="resources/tree.png" />
+        <div class="caption">An example of a decision tree which is classifying memes based on randomness and funniness. The numbers beneath the terminal nodes show correct and incorrect classifications of the test data</div>
+        <p>Trees do not necessarily have to make divisions along the data axes; trees which create diagonal splits as well are called oblique decision trees.</p>
+        
+        <h3>Linear Discriminant Analysis (LDA)</h3>
+        <p>LDA is a PCA-like procedure that searches for the component axes which best split the training data into their correct categories. Just like with PCA, we can see the data as it is defined on the "principal component" axes to determine factors which contribute to variance in the data. LDA is easy to implement in R.</p>
+        <div class="ims"><img class="ims" src="resources/clust.png" /></div><div class="ims"><img class="ims" src="resources/LDA.png" /></div>
+        <div class="caption">Left: training data classifications. Right: LDA axes of the same data</div>
+        
+        <h3>Nearest-Neighbor Classification</h3>
+        <p>If two clusters are intermingled in a complicated (but deterministic) manner, it may be useful to use <i>k</i>-nearest neighbor (k-nn) classification. This method assigns test data to the same category that the <i>k</i> nearest neighbors of the training data are assigned to. This type of method is also called a memory-based classifier, since it relies on remembering the training data itself and not just where to make divisions.</p>
+        <img src="resources/knear1.png" />
+        <img src="resources/knear2.png" />
+        <div class="caption">Visualization of the assignment process for k-nn classification. Points are training data</div>
+        
+        <h3>Visualizing Misclassifications</h3>
+        <p>Jitter plots are a good way of visualizing how a certain method misclassifies test data, and how misclassification might compare across methods.</p>
+        <img src="resources/jitter.png" />
+        <div class="caption">Jitter plots comparing three different classification methods for the meme data from before</div>
+        
+        <div class="end"></div>
+        
+    </div>
+    
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>

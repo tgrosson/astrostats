@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ASTR 408 Review | Astrostatistics</title>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+
+
+<body>
+    <header class="site-header">
+        <div class="site-header-inner">
+            <h1 class="site-title"><a href="home.html" rel="home">Ted's Astrostatistics Review!</a></h1>
+            <h1 class="site-links"><a href="math.html">Math Intro</a> <a href="nonparam.html">Nonparametrics</a> <a href="regr.html">Regression</a> <a href="smooth.html">Data Smoothing</a> <a href="pca.html">Multivariate Analysis/PCA</a> <a href="time.html">Time Series Analysis</a> <a href="clust.html">Clustering</a> <a href="trunc.html">Censored/Truncated Data</a> <a href="spatial.html">Spatial Point Processes</a> <a href="bayes.html">Bayesian&nbsp;Stats</a></h1>
+        </div>
+    </header>
+    
+    <div class="content">
+        <h1 class="page-title">Nonparametrics</h1>
+        <h2>Terms:</h2>
+        <ul class="terms">
+            <li>nonparametrics &mdash; tests (e.g.) which don't assume underlying distributions</li>
+            <li>robust &mdash; insensitive to small deviations from assumed models</li>
+        </ul>
+        
+        <h2>R Functions:</h2>
+        <ul class="r">
+            <li>ks.test(x,'distribution')</li>
+            <li>cor.test(x, y, method="spearman")</li>
+            <li>fisher.test(&lt;matrix&gt;)</li>
+        </ul>
+        
+        <h2>EDF Tests</h2>
+        <p>There are several tests which test the fit of an empirical distribution function (edf) to a specified cdf with predetermined parameters. These tests should not be used if testing the fit to a paramterically determined model.</p>
+        
+        <h3>Kolmogorov-Smirnov (KS) Test</h3>
+        <P>Measures maximum distance between edf and model: \(M_{KS}=\sqrt{n}\max\limits_{x}|\hat{F}_n(x)-F_0(x)|\), and the critical value is \(M_{KS}^{crit} > (-\frac{1}{2}\ln(\frac{\alpha}{2}))^{1/2}\). A value of \(M_{KS}\) greater than the critical value signifies rejection of the null hypothesis that the edf and cdf are of the same distribution, at a significane level of <i>&alpha;</i>.</P>
+        
+        <h3>Cram&eacute;r-von Mises (CvM) Statistic</h3>
+        <p>Measures the sum of squared distances between the edf and a specified cdf: \(T_{CvM,n}=\frac{1}{12n}+\sum\limits_i^n(\frac{2i-1}{2n}-F(X_{(i)}))^2\).</p>
+        
+        <h3>Anderson-Darling (AD) Statistic</h3>
+        <p>Addresses the problem that the differences between the edf and cdf get squeezed at the ends of the distribution, causing the KS and CvM tests to miss differences in the tails. the AD statistic is a weighted variant of the CvM statistic: \(A_{AD,n}^2=n\sum\limits_i^n\frac{[i/n-F_0(X_i)]^2}{F_0(X_i)(1-F_0(X_i)}\). This test tends to be more effective than the others.</p>
+        
+        <h2>Hypothesis Testing</h2>
+        <h3>Sign Test</h3>
+        <p>If we have a guess for the median of a sequence of random variables, the sign statistic is the difference between the number of points greater than and less than the guess. If we only look at the number greater than the guess, this value follows a binomial distribution, which can be used to get critical values.</p>
+        
+        <h3>Mann-Whitney-Wilcoxon (MWW) Test</h3>
+        <p>Also the Wilcoxon rank sum test, this tests whether two samples come from identical populations. The test merges and ranks the two samples, and the test staistic \(T_{MWW}\) is the sum of the ranks of the first sample. This statistic is asymptotically normal (use <i>n</i> greater than about 20) with mean \(\frac{m(n+m+1)}{2}\) and variance \(\frac{nm(n+m+1)}{12}\). The hypothesis of identicle distributions can then be tested with a z-score. If the samples have ties, we can assign the average rank value to the tied points, though this can result in bias.</p>
+        <div class="ims"><img src="resources/mww1.jpg" class="ims" /></div><div class="ims"><img src="resources/mww2.jpg" class="ims" /></div>
+        <div class="caption">Applying MWW test to two samples</div>
+        
+        <h2>Multivariate Tests</h2>
+        <h3>Spearman Rank Test</h3>
+        <p>Tests two samples of paired observations for independence by taking the difference <i>d</i> between the rank in the first and second samples for each observation. The statistic \(D^2=\sum d^2\). If the samples have ties, then if \(t_x\) is the number of ties involving <i>x</i> elements, \(T=\sum\frac{x^3-x}{12}\). We can then use a \(D^2+T\) table to interpret the results.</p>
+        <img src="resources/speartab.jpg" />
+        <div class="caption">Spearman correlation test D<sup>2</sup>+T table</div>
+        <div class="ims"><img src="resources/spear1.jpg" class="ims" /></div><div class="ims"><img src="resources/spear2.jpg" class="ims" /></div>
+        <div class="caption">Applying Spearman test to a bivariate data set</div>
+        
+        <h3>Kendall &tau; Correlation Test</h3>
+        <p>Counts concordant \(N_c\) and discordant \(N_d\) pairs: for a pair of observations in sample 1, if the order of their ranks agrees with their ranks sample 2, they are concordant; otherwise they are discordant. Then the statistic \(\tau_K=\frac{N_c-N_d}{N_c+N_d}\), and we can use a table to interpret it.</p>
+        <img src="resources/kendalltab.jpg" class="wideim" />
+        <div class="caption">Kendall &tau; test table</div>
+        
+        <h2>Contingency Tables</h2>
+        <h3>Fisher's Exact Test</h3>
+        <p>Tests whether two variables of categorical data are independent. For a sample contingency table</p>
+        <table>
+        <tr><th></th><th>Male</th><th>Female</th></tr>
+        <tr><td>tall</td><td>a=9</td><td>b=3</td></tr>
+        <tr><td>short</td><td>c=21</td><td>d=17</td></tr></table>
+        the probability of getting this table given the null hypothesis that the two variables are independent is \(\frac{\binom{a+b}{b}\binom{c+d}{d}}{\binom{a+b+c+d}{b+d}} = \frac{\binom{12}{3}\binom{38}{17}}{\binom{50}{20}}=0.1344\). The p-value is the sum of this with all values of b lower than the actual value.
+        
+        <div class="end"></div>
+        
+    </div>
+
+    <footer class="site-footer">
+        This site &copy; Ted Grosson 2020
+    </footer>
+</body>
